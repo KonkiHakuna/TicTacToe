@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//TicTacToe
+// TicTacToe
 
 #define BOARD_SIZE 3
 char BOARD[BOARD_SIZE][BOARD_SIZE];
@@ -14,7 +14,7 @@ const char PlayerTwoSign = 'O';
 char CurrentPlayerSign;
 bool IsDraw = false;
 void Initialize() {
-    //Deklaracja planszy do gry 3x3 o indeksach {0;1;2}
+	// Initialize the game board with empty spaces
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             BOARD[i][j] = '_';
@@ -24,7 +24,7 @@ void Initialize() {
 }
 
 void Print() {
-    //Wyswietlanie planszy do gry
+    // Print the game board
     cout << ' ';
     for (int i = 0; i < BOARD_SIZE; i++) {
         cout << i;
@@ -40,7 +40,7 @@ void Print() {
 }
 
 void GetPlayerInput(char playerSign) {
-    //Wczytywanie koordynatow punktu przez gracza
+	// Get input from the player and update the board
     bool inputOk = false;
     while (!inputOk) {
         int x, y;
@@ -64,7 +64,7 @@ void GetPlayerInput(char playerSign) {
 }
 
 void ChangePlayer() {
-    //Zmiana znaku dla wartosci CurrentPlayerSign
+	// Switch the current player
     if (CurrentPlayerSign == PlayerOneSign) {
         CurrentPlayerSign = PlayerTwoSign;
     }
@@ -74,7 +74,7 @@ void ChangePlayer() {
 }
 
 bool CheckGameState() {
-    //Sprawdzanie czy jeden z graczy nie wygral
+	// Check if the game is over
     for (int i = 0; i < BOARD_SIZE; i++) {
         bool result = true;
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -116,9 +116,10 @@ bool CheckGameState() {
     return false;
 }
 
-//SEKCJA AI
+/* ======================== AI section ======================== */
+
 bool IsAIwin(char playerSign) {
-    //Sprawdzenie, czy komputer moze wygrac w kolejnym ruchu.
+	// Check if the AI can win in the next move
     for (int i = 0; i < BOARD_SIZE; i++) {
         int temp1 = 0, temp2 = 0;
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -136,7 +137,7 @@ bool IsAIwin(char playerSign) {
             return true;
         }
     }
-    ////////////////////////////////////////////////////////////////
+    
     for (int i = 0; i < BOARD_SIZE; i++) {
         int temp1 = 0, temp2 = 0;
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -154,7 +155,7 @@ bool IsAIwin(char playerSign) {
             return true;
         }
     }
-    ////////////////////////////////////////////////////////////////
+    
     int temp1 = 0, temp2 = 0;
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (BOARD[i][i] == playerSign) {
@@ -170,7 +171,7 @@ bool IsAIwin(char playerSign) {
         }
         return true;
     }
-    ////////////////////////////////////////////////////////////////
+    
     temp1 = 0, temp2 = 0; int var = 2;
     for (int i = 0; i < BOARD_SIZE; i++, var--) {
         if (BOARD[i][var] == playerSign) {
@@ -191,7 +192,7 @@ bool IsAIwin(char playerSign) {
 }
 
 bool CanAIblock(char playerSign) {
-    //Sprawdzenie, czy przeciwnik nie wygra w następnym ruchu. Jeśli istnieje taka możliwość, komputer blokuje potencjalne zwycięskie pole.
+	// Check if the AI can block the opponent from winning
     char SecondPlayerSign;
     if (playerSign == 'X') {
         SecondPlayerSign = 'O';
@@ -218,7 +219,7 @@ bool CanAIblock(char playerSign) {
             return true;
         }
     }
-    ///////////////////////////////////////////////////////
+    
     for (int i = 0; i < BOARD_SIZE; i++) {
         int temp1 = 0, temp2 = 0;
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -238,7 +239,7 @@ bool CanAIblock(char playerSign) {
             return true;
         }
     }
-    ///////////////////////////////////////////////////////
+    
     int temp1 = 0, temp2 = 0;
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (BOARD[i][i] == SecondPlayerSign) {
@@ -256,7 +257,7 @@ bool CanAIblock(char playerSign) {
         }
         return true;
     }
-    ////////////////////////////////////////////////////////////////
+    
     temp1 = 0, temp2 = 0; int var = 2;
     for (int i = 0; i < BOARD_SIZE; i++, var--) {
         if (BOARD[i][var] == SecondPlayerSign) {
@@ -279,7 +280,7 @@ bool CanAIblock(char playerSign) {
 }
 
 void AIturn(char playerSign) {
-    //Losowy ruch wykonany przez komputer.
+	// AI makes a random move
     srand(time(NULL));
     int randx = 0, randy = 0;
     while (true) {
@@ -293,9 +294,7 @@ void AIturn(char playerSign) {
 }
 
 void GetAIinput(char playersign) {
-    /*Funkcja pobiera znak komputera.
-    Sprawdzane są dwa przypadki: pierwszy – czy komputer jest w stanie wygrać w jednym ruchu, drugi – czy przeciwnik będzie mógł wygrać w kolejnym ruchu.
-    Jeśli żaden z tych warunków nie jest spełniony, to komputer stawia znak w losowym wolnym polu.*/
+	// AI decides its move
     if (IsAIwin(playersign)) {
         return;
     }
@@ -310,75 +309,97 @@ void GetAIinput(char playersign) {
 
 int main()
 {
-
-    //Dodaj remis i to aby mozna bylo wpisac male p/k na start
-    //Funkcja główna
+	// Main function to run the game
     char Opponent;
     int a = true;
     char ans;
-    cout << "Gra w kolko i krzyzyk :)" << endl;
+    cout << "Welcome to my Tic Tac Toe game!" << endl;
     while (a == true) {
-        cout << "Chcesz grac z przyjacielem(P) czy z komputerem(K)? ";
-        cin >> Opponent; Opponent = toupper(Opponent);
-        cout << "Jaki chcesz miec znak jako osoba rozpoczynajaca?(X/O) ";
-        cin >> CurrentPlayerSign; CurrentPlayerSign = toupper(CurrentPlayerSign);
-        if ((Opponent == 'K' || Opponent == 'P') && (CurrentPlayerSign == 'X' || CurrentPlayerSign == 'O')) {
-            if (Opponent == 'K') {
-                Initialize();
-                bool b = true;
-                while (b == true) {
-                    while (true) {
-                        Print();
-                        GetPlayerInput(CurrentPlayerSign);
-                        if (CheckGameState()) {
-                            break;
-                        }
-                        GetAIinput(CurrentPlayerSign);
-                        if (CheckGameState()) {
-                            break;
-                        }
-                    }
-                    if (IsDraw) {
-                        Print();
-                        cout << "Mamy remis!" << endl;
-                    }
-                    else {
-                        Print();
-                        cout << "Brawo, wygral uzytkownik ze znakiem:" << CurrentPlayerSign << endl;
-                    }
-                    b = false;
-                }
+        while (true) {
+            cout << "Do you want to play with your friend (F) or with a computer (C)? ";
+            cin >> Opponent; Opponent = toupper(Opponent);
+			if (Opponent == 'C' || Opponent == 'F') {
+				break;
+			}
+			else {
+				cout << "Invalid input. Please try again." << endl;
+			}
+        }
+
+        while (true) {
+            cout << "Which symbol do you want to play as? (X/O): ";
+            cin >> CurrentPlayerSign; CurrentPlayerSign = toupper(CurrentPlayerSign);
+			if (CurrentPlayerSign == 'X' || CurrentPlayerSign == 'O') {
+				break;
             }
-            else if (Opponent == 'P') {
-                Initialize();
-                bool c = true;
-                while (c == true) {
-                    while (true) {
-                        Print();
-                        GetPlayerInput(CurrentPlayerSign);
-                        if (CheckGameState()) {
-                            break;
-                        }
-                    }
-                    if (IsDraw) {
-                        Print();
-                        cout << "Mamy remis!" << endl;
-                    }
-                    else {
-                        Print();
-                        cout << "Brawo, wygral uzytkownik ze znakiem:" << CurrentPlayerSign << endl;
-                    }
-                    c = false;
-                }
-            }
-            cout << "Czy chcesz zagrac ponownie?(T/N)";
-            cin >> ans;
-            if (ans == 'N') {
-                a = false;
+			else {
+				cout << "Invalid input. Please try again." << endl;
             }
         }
-        else {
-            cout << "Blad, wprowadz wartosci ponownie" << endl;
+
+    	if (Opponent == 'C') {
+    		Initialize();
+    		bool b = true;
+    		while (b == true) {
+    			while (true) {
+    				Print();
+    				GetPlayerInput(CurrentPlayerSign);
+    				if (CheckGameState()) {
+    					break;
+    				}
+    				GetAIinput(CurrentPlayerSign);
+    				if (CheckGameState()) {
+    					break;
+    				}
+    			}
+    			if (IsDraw) {
+    				Print();
+    				cout << "It's a draw!\n" << endl;
+    			}
+    			else {
+    				Print();
+    				cout << "Congratulations! Player with symbol " << CurrentPlayerSign << " won." << endl;
+    			}
+    			b = false;
+    		}
+    	}
+
+    	else if (Opponent == 'F') {
+    		Initialize();
+    		bool c = true;
+    		while (c == true) {
+    			while (true) {
+                    Print();
+    				GetPlayerInput(CurrentPlayerSign);
+    				if (CheckGameState()) {
+    					break;
+    				}
+    			}
+    			if (IsDraw) {
+    				Print();
+    				cout << "It's a draw!" << endl;
+    			}
+    			else {
+    				Print();
+    				cout << "Congratulations! Player with symbol " << CurrentPlayerSign << " won." << endl;
+    			}
+    			c = false;
+    		}
+        }
+
+        while (true) {
+			cout << "Do you want to play again? (Y/N): ";
+			cin >> ans; ans = toupper(ans);
+            if (ans == 'Y') {
+	            break;
+            }
+			else if (ans == 'N') {
+				a = false;
+				break;
+			}
+            else {
+				cout << "Invalid input. Please try again." << endl;
+            }
         }
     }
     return 0;
