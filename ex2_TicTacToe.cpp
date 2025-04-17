@@ -13,6 +13,7 @@ const char PlayerOneSign = 'X';
 const char PlayerTwoSign = 'O';
 char CurrentPlayerSign;
 bool IsDraw = false;
+
 void Initialize() {
 	// Initialize the game board with empty spaces
     for (int i = 0; i < BOARD_SIZE; i++) {
@@ -20,7 +21,7 @@ void Initialize() {
             BOARD[i][j] = '_';
         }
     }
-
+	IsDraw = false;
 }
 
 void Print() {
@@ -200,6 +201,7 @@ bool CanAIblock(char playerSign) {
     else {
         SecondPlayerSign = 'X';
     }
+
     for (int i = 0; i < BOARD_SIZE; i++) {
         int temp1 = 0, temp2 = 0;
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -219,14 +221,14 @@ bool CanAIblock(char playerSign) {
             return true;
         }
     }
-    
+
     for (int i = 0; i < BOARD_SIZE; i++) {
         int temp1 = 0, temp2 = 0;
         for (int j = 0; j < BOARD_SIZE; j++) {
             if (BOARD[j][i] == SecondPlayerSign) {
                 temp1 += 1;
             }
-            else if (BOARD[i][j] == '_') {
+            else if (BOARD[j][i] == '_') {
                 temp2 += 1;
             }
         }
@@ -234,6 +236,7 @@ bool CanAIblock(char playerSign) {
             for (int k = 0; k < BOARD_SIZE; k++) {
                 if (BOARD[k][i] == '_') {
                     BOARD[k][i] = playerSign;
+                    break;;
                 }
             }
             return true;
@@ -249,6 +252,7 @@ bool CanAIblock(char playerSign) {
             temp2 += 1;
         }
     }
+
     if (temp1 == 2 && temp2 == 1) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             if (BOARD[i][i] == '_') {
@@ -281,11 +285,10 @@ bool CanAIblock(char playerSign) {
 
 void AIturn(char playerSign) {
 	// AI makes a random move
-    srand(time(NULL));
     int randx = 0, randy = 0;
     while (true) {
-        randx = rand() % 2;
-        randy = rand() % 2;
+        randx = rand() % BOARD_SIZE;
+        randy = rand() % BOARD_SIZE;
         if (BOARD[randx][randy] == '_') {
             BOARD[randx][randy] = playerSign;
             break;
@@ -310,6 +313,7 @@ void GetAIinput(char playersign) {
 int main()
 {
 	// Main function to run the game
+    srand(time(NULL));
     char Opponent;
     int a = true;
     char ans;
